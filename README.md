@@ -29,11 +29,11 @@ This class defines the (special) methods to be used by players when in battle - 
 
 ### Battle
 This class defines the methods that comprise the battling mechanism:
-- findOrder - compares two objects/players and determines the player with the highest speed value or, if the speeds are equal, the player with the highest luck value/percentage, and determines the player who will strike/attack first.
+- setOrder - compares two objects/players and determines the player with the highest speed value or, if the speeds are equal, the player with the highest luck value/percentage, and determines the player who will strike/attack first. Assigns object variable to a new one (passed by reference), making both objects copies of the same identifier. Called in class constructor.
 - intro - outputs a nicely formated intro message with the players initial stats.
 - statsAfterTurn - outputs the players stats after each turn. Uses formated objects (__toString).
 - endBattle - outputs the finishing message, when a player is killed and the other declared winner, and exits the script.
-- doBattle - the battle workflow. Calls into output, establishes the order of battle/first player to attack. Loops through the battle turns until the turns limit is reached, in which case it outputs a draw message, or until a player is no longer alive. Calls for attack and defend methods in succesion, analyzes the result and checks wether the attacked player has been killed, and calls for endBattle if so. Outputs the players' stats at the end of every turn. 
+- doBattle - the battle workflow. Calls intro output. Loops through the battle turns until the turns limit is reached, in which case it outputs a draw message, or until a player is no longer alive. Calls for attack and defend methods in succesion, analyzes the result and checks wether the attacked player has been killed, and calls for endBattle if so. Outputs the players' stats at the end of every turn. 
 
 ## Other files
 - gameplay.php - script for manually testing various battle scenarios

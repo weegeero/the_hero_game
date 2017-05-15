@@ -9,6 +9,7 @@
 		class properties/attributes
 		*/
 		private $obj1, $obj2;
+		private $first, $second;
 		private $turns;
 
 		/*
@@ -21,6 +22,7 @@
 			$this->obj1 = $obj1;
 			$this->obj2 = $obj2;
 			$this->turns = is_numeric($turns) ? $turns : 20;
+			$this->setOrder();
 		}
 
 		/*
@@ -32,43 +34,34 @@
 			$this->intro();
 
 			$turn = 1;
-			$chars = $this->findOrder();
-			$first = $chars['first'];
-			$second = $chars['second'];
-			echo $first->getName() . ' has first strike.' . NL . NL;
+			echo $this->first->getName() . ' has first strike.' . NL . NL;
 
 			while ($turn <= $this->turns) {
 				echo 'TURN ' . $turn . ':' . NL;
-				$first->attack($second);
-				if (!$second->isAlive()) {
-					$this->endBattle($first, $second);
-				}
-				$second->attack($first);
-				if (!$first->isAlive()) {
-					$this->endBattle($second, $first);
-				}
-				$this->statsAfterTurn($turn);
-				$first->randomizeStats();
-				$second->randomizeStats();
-				echo NL;
-				$turn++;
-				//sleep(3);
-
-				echo 'TURN ' . $turn . ':' . NL;
-				$second->attack($first);
-				if (!$first->isAlive()) {
-					$this->endBattle($second, $first);
-				}
-				$first->attack($second);
-				if (!$second->isAlive()) {
-					$this->endBattle($first, $second);
+				if ($turn % 2 == 1) {
+					$this->first->attack($this->second);
+					if (!$this->second->isAlive()) {
+						$this->endBattle($this->first, $this->second);
+					}
+					$this->second->attack($this->first);
+					if (!$this->first->isAlive()) {
+						$this->endBattle($this->second, $this->first);
+					}
+				} else {
+					$this->second->attack($this->first);
+					if (!$this->first->isAlive()) {
+						$this->endBattle($this->second, $this->first);
+					}
+					$this->first->attack($this->second);
+					if (!$this->second->isAlive()) {
+						$this->endBattle($this->first, $this->second);
+					}
 				}
 				$this->statsAfterTurn($turn);
-				$first->randomizeStats();
-				$second->randomizeStats();
+				$this->first->randomizeStats();
+				$this->second->randomizeStats();
 				echo NL;
 				$turn++;
-				//sleep(3);
 			}
 			echo 'Battle ended in a draw, after ' . $this->turns . ' turns...' . NL;
 		}
@@ -77,17 +70,22 @@
 		determines which character attacks first
 		@return array
 		*/
-		private function findOrder() {
+		private function setOrder() {
 
 			if ($this->obj1->speed > $this->obj2->speed) {
-				return array('first' => $this->obj1, 'second' => $this->obj2);
+				$this->first = $this->obj1;
+				$this->second = $this->obj2;
 			} elseif ($this->obj1->speed < $this->obj2->speed) {
-				return array('first' => $this->obj2, 'second' => $this->obj1);
+				$this->first = $this->obj2;
+				$this->second = $this->obj1;
 			} else {
 				if ($this->obj1->luck >= $this->obj2->luck) {
-					return array('first' => $this->obj1, 'second' => $this->obj2);
+					$this->first = $this->obj1;
+					$this->second = $this->obj2;
+				} else {
+					$this->first = $this->obj2;
+					$this->second = $this->obj1;
 				}
-				return array('first' => $this->obj2, 'second' => $this->obj1);
 			}
 		}
 
@@ -119,9 +117,11 @@
 		*/
 		private function statsAfterTurn($turn) {
 
-			echo 'Characters\'s stats after turn ' . $turn . ' are:' . NL;
-			echo $this->obj1 . NL;
-			echo $this->obj2 . NL;
+			echo 'Characters\' stats after turn ' . $turn . ' are:' . NL;
+			echo $this->obj1 . NL; // reference, but it works either way
+			echo $this->obj2 . NL; // 
+			//echo $this->first . NL; 
+			//echo $this->second . NL;
 		}
 
 		/*
