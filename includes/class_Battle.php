@@ -8,9 +8,8 @@
 		/*
 		class properties/attributes
 		*/
-		private $obj1, $obj2;
 		private $first, $second;
-		private $turns;
+		private $turns, $heroName, $beastName;
 
 		/*
 		class constructor
@@ -19,10 +18,10 @@
 		*/
 		public function __construct($obj1, $obj2, $turns = 20) {
 
-			$this->obj1 = $obj1;
-			$this->obj2 = $obj2;
 			$this->turns = is_numeric($turns) ? $turns : 20;
-			$this->setOrder();
+			$this->setOrder($obj1, $obj2);
+			$this->heroName = $obj1->getName();
+			$this->beastName = $obj2->getName();
 		}
 
 		/*
@@ -70,21 +69,21 @@
 		determines which character attacks first
 		@return array
 		*/
-		private function setOrder() {
+		private function setOrder($obj1, $obj2) {
 
-			if ($this->obj1->speed > $this->obj2->speed) {
-				$this->first = $this->obj1;
-				$this->second = $this->obj2;
-			} elseif ($this->obj1->speed < $this->obj2->speed) {
-				$this->first = $this->obj2;
-				$this->second = $this->obj1;
+			if ($obj1->speed > $obj2->speed) {
+				$this->first = $obj1;
+				$this->second = $obj2;
+			} elseif ($obj1->speed < $obj2->speed) {
+				$this->first = $obj2;
+				$this->second = $obj1;
 			} else {
-				if ($this->obj1->luck >= $this->obj2->luck) {
-					$this->first = $this->obj1;
-					$this->second = $this->obj2;
+				if ($obj1->luck >= $obj2->luck) {
+					$this->first = $obj1;
+					$this->second = $obj2;
 				} else {
-					$this->first = $this->obj2;
-					$this->second = $this->obj1;
+					$this->first = $obj2;
+					$this->second = $obj1;
 				}
 			}
 		}
@@ -95,17 +94,15 @@
 		*/
 		private function intro() {
 
-			$intro = 'Our great hero, ' . $this->obj1->getName() . ' will battle ' . $this->obj2->getName() . ' in the ever-green forests of Emagia';
+			$intro = 'Our great hero, ' . $this->heroName . ' will battle ' . $this->beastName . ' in the ever-green forests of Emagia';
 			echo NL . str_pad('', strlen($intro), '=') . NL;
 			echo $intro . NL;
 			echo 'Characters\'s starting stats are:' . NL;
-			echo $this->obj1 . NL;
-			echo $this->obj2 . NL;
-			//echo '=====================' . NL;
+			echo $this->first . NL;
+			echo $this->second . NL;
 			echo NL;
 			$begin = 'Let The Battle Begin!';
 			echo str_pad($begin, round((strlen($intro) - strlen($begin))/2)+strlen($begin), ' ', STR_PAD_LEFT) . NL;
-			//echo '=====================' . NL;
 			echo NL;
 			echo str_pad('', strlen($intro), '=') . NL;
 		}
@@ -118,10 +115,8 @@
 		private function statsAfterTurn($turn) {
 
 			echo 'Characters\' stats after turn ' . $turn . ' are:' . NL;
-			echo $this->obj1 . NL; // reference, but it works either way
-			echo $this->obj2 . NL; // 
-			//echo $this->first . NL; 
-			//echo $this->second . NL;
+			echo $this->first . NL; 
+			echo $this->second . NL;
 		}
 
 		/*
